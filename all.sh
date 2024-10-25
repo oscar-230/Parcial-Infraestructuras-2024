@@ -8,31 +8,28 @@
 # Autor: John Sanabria - john.sanabria@correounivalle.edu.co
 # Fecha: 2024-08-22
 #
+IMAGEN_DIR="imagenes"  # Directorio donde están las imágenes
 
-IMAGES_DIR="imagenes"
+# Procesar cada imagen en el directorio
+for INPUT_PNG in ${IMAGEN_DIR}/*.png; do
+    # Extraer el nombre base del archivo sin la extensión .png
+    BASE_NAME=$(basename "${INPUT_PNG}" .png)
+    # Definir el archivo binario con la extensión .bin
+    TEMP_FILE="${IMAGEN_DIR}/${BASE_NAME}.bin"
 
-for INPUT_PNG in "${IMAGES_DIR}"/*.png; do
-  if [[ -f "$INPUT_PNG" ]]; then
-    BASENAME=$(basename "$INPUT_PNG" .png)
-    TEMP_FILE="${IMAGES_DIR}/${BASENAME}.bin"
+    echo "Procesando imagen: ${INPUT_PNG}"
 
+    # Convertir la imagen PNG a binario
     python3 fromPNG2Bin.py "${INPUT_PNG}"
 
-    # Verificar si se creó el archivo binario
-    if [[ ! -f "${TEMP_FILE}" ]]; then
-      echo "Error: El archivo binario ${TEMP_FILE} no fue creado."
-      continue
-    fi
-
+    # Procesar el archivo binario con el ejecutable
     ./main "${TEMP_FILE}"
 
-    # Verificar si se creó el archivo de salida
-    if [[ ! -f "${TEMP_FILE}.new" ]]; then
-      echo "Error: El archivo ${TEMP_FILE}.new no fue creado por el programa C."
-      continue
-    fi
+    # Definir el nombre del archivo procesado
+    PROCESSED_FILE="${TEMP_FILE}.new"
 
-    python3 fromBin2PNG.py "${TEMP_FILE}.new"
-    mv "${TEMP_FILE}.new" "${IMAGES_DIR}/${BASENAME}.bin.PNG"
-  fi
+    # Convertir el archivo binario procesado a imagen PNG
+    python3 fromBin2PNG.py "${PROCESSED_FILE}"
+
+    echo "Imagen procesada: ${INPUT_PNG}"
 done
