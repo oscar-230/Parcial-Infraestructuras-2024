@@ -1,5 +1,7 @@
 # Procesamiento de imágenes
 
+### La medicion de los tiempos y el SpeedUp se encuentran el DOC donde se está el link de este repositorio
+
 Este directorio contiene un conjunto de códigos que permiten aplicar un conjunto de filtros básicos a una imagen usando el lenguaje C.
 Los filtros que se pueden aplicar son:
 
